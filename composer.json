@@ -1,0 +1,18 @@
+{
+    "name": "roman/phpiggy.local",
+    "description": "A php application for tracking expenses",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Roman.Pererushev",
+            "email": "roman.pererushev@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Framework\\": "src/Framework",
+            "App\\": "src/App"
+        }
+    }
+}
