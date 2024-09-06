@@ -1,0 +1,63 @@
+services:
+  app:
+      build:
+        args:
+          user: roman
+          uid: 1000
+        context: ./
+        dockerfile: ./docker/app/Dockerfile
+      image: phpiggy
+      container_name: phpiggy-app
+      restart: unless-stopped
+      working_dir: /var/www/
+      ports:
+      - 192.168.91.17:9000:9000
+      volumes:
+        - ./:/var/www
+      networks:
+        - phpiggy
+
+  db:
+    image: bitnami/mariadb:latest
+    container_name: phpiggy-db
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 192.168.91.17:3306:3306
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - phpiggy
+
+  phpmyadmin:
+    depends_on:
+      - db
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 192.168.91.17:8090:80
+    environment:
+      PMA_HOST: db
+    networks:
+      - phpiggy
+
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: phpiggy-nginx
+    restart: unless-stopped
+    ports:
+      - 192.168.91.17:80:80
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - phpiggy
+
+networks:
+  phpiggy:
+    name: phpiggy
+    ipam:
+      config:
+        - subnet: 192.168.91.0/24
+          gateway: 192.168.91.17
