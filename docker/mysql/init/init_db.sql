@@ -2,11 +2,15 @@ CREATE DATABASE phpiggy;
 GRANT ALL PRIVILEGES ON phpiggy.* TO 'root'@'%' IDENTIFIED BY '';
 GRANT ALL PRIVILEGES ON phpiggy.* TO 'root'@'localhost' IDENTIFIED BY '';
 USE phpiggy;
-DROP TABLE IF EXISTS `products`;
-CREATE TABLE `products` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-INSERT INTO `products` (name) VALUES ('Shirts'),('Hats'),('Shoes'),('Gloves'),('Scarf'),('Glasses'),('Sweaters');
+CREATE TABLE IF NOT EXISTS users(
+  id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  age TINYINT(3) UNSIGNED NOT NULL,
+  country VARCHAR(255) NOT NULL,
+  social_media_url VARCHAR(255) NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  PRIMARY KEY(id),
+  UNIQUE KEY(email)
+)
