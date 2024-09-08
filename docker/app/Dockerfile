@@ -33,4 +33,3 @@ WORKDIR /var/www
 
 USER $user
 
-CMD bash -c "composer install"
