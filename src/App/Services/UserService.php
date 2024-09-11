@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use Framework\Database;
+use Framework\Exceptions\ValidationException;
 
 class UserService
 {
@@ -13,8 +14,54 @@ class UserService
 
     public function isEmailTaken(string $email)
     {
+        $emailCount = $this->db->query(
+            "SELECT COUNT(*) FROM users WHERE email = :email",
+            [
+                'email' => $email
+            ]
+        )->count();
+
+        if ($emailCount > 0) {
+            throw new ValidationException(['email' => 'Email taken']);
+        }
+    }
+
+    public function addUser(array $data)
+    {
+        $password = password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]);
+
         $this->db->query(
-            "SELECT COUNT(*) FROM users WHERE email = :email"
+            "INSERT INTO users (email, password, age, country, social_media_url) VALUES (:email, :password, :age, :country, :social_media_url)",
+            [
+                'email' => $data['email'],
+                'password' => $password,
+                'age' => $data['age'],
+                'country' => $data['country'],
+                'social_media_url' => $data['socialMediaURL'],
+            ]
         );
+    }
+
+    public function login(array $formData)
+    {
+        $user = $this->db->query(
+            "SELECT * FROM users WHERE email = :email",
+            [
+                'email' => $formData['email']
+            ]
+        )->find();
+
+        $passwordsMatch = password_verify(
+            $formData['password'],
+            $user['password'] ?? ''
+        );
+
+        if (!$user || !$passwordsMatch) {
+            throw new ValidationException(['password' => 'Invalid credentials']);
+        }
+
+        session_regenerate_id();
+
+        $_SESSION['user'] = $user['id'];
     }
 }
