@@ -1,4 +1,4 @@
-CREATE DATABASE phpiggy;
+CREATE DATABASE IF NOT EXISTS phpiggy;
 GRANT ALL PRIVILEGES ON phpiggy.* TO 'root'@'%' IDENTIFIED BY '';
 GRANT ALL PRIVILEGES ON phpiggy.* TO 'root'@'localhost' IDENTIFIED BY '';
 USE phpiggy;

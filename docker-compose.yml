@@ -38,7 +38,7 @@ services:
     ports:
       - 192.168.91.17:3306:3306
     volumes:
-      - ./docker/mysql/data:/var/lib/mysql
+      - dbdata:/var/lib/mysql
       - ./docker/mysql/init:/docker-entrypoint-initdb.d
     networks:
       - phpiggy
@@ -62,3 +62,6 @@ networks:
       config:
         - subnet: 192.168.91.0/24
           gateway: 192.168.91.17
+
+volumes:
+  dbdata: {}
