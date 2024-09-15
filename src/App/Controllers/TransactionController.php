@@ -26,4 +26,10 @@ class TransactionController
         $this->transactionService->create($_POST);
         redirectTo('/');
     }
+
+    public function editView(array $params)
+    {
+        echo $this->view->render("transactions/edit.php");
+        dd($params);
+    }
 }
