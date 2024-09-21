@@ -7,3 +7,4 @@ Installation
 - docker exec -it phpiggy-app sh
 - composer update
 - composer install
+- cp .env.example .env
